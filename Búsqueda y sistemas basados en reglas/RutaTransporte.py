@@ -3,9 +3,6 @@ Implementa
 -un sistema basado en reglas reglas logicas para buscar la mejor ruta para moverse desde un punto A a un punto B para encontrar la mejor ruta
 entre puntos de un sistema de transporte masivo.
 
-Instrucciones:
-    python ruta_transporte.py
-
 El script contiene:
 - KB: hechos (estacion, tramo)
 - Motor: vecinos y reglas de coste (p. ej. coste por transferencia)
@@ -151,4 +148,5 @@ def ejemplo_prueba():
 
 if __name__ == "__main__":
     ejemplo_prueba()
+
 # Fin del script
