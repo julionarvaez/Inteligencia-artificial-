@@ -3,9 +3,11 @@ Implementa
 -un sistema basado en reglas reglas logicas para buscar la mejor ruta para moverse desde un punto A a un punto B para encontrar la mejor ruta
 entre puntos de un sistema de transporte masivo.
 
+
+
 El script contiene:
 - KB: hechos (estacion, tramo)
-- Motor: vecinos y reglas de coste (p. ej. coste por transferencia)
+- Motor: vecinos y reglas de coste 
 - A*: búsqueda con heurística euclidiana si hay coordenadas
 """
 
@@ -13,11 +15,11 @@ import math
 import heapq
 from typing import Dict, Tuple, List, Any, Optional
 
-# -----------------------
-# BASE DE CONOCIMIENTO (KB)
-# -----------------------
-# Estaciones con coordenadas (opcional, usadas por la heurística)
-# formato: "estacion_id": (x, y)
+
+# BASE DE CONOCIMIENTO 
+'''Estaciones con coordenadas (opcional, usadas por la heurística)
+formato: "estacion_id": (x, y)'''
+
 ESTACIONES_COORD = {
     "A": (0, 0),
     "B": (5, 1),
@@ -28,9 +30,11 @@ ESTACIONES_COORD = {
     "G": (10, -1)
 }
 
+
 # Tramos (aristas) entre estaciones con atributos.
-# Cada tramo: (origen, destino): {"tiempo": minutos, "dist": km, "linea": "L1"}
-# El grafo se asume bidireccional salvo que se especifique lo contrario.
+''' Cada tramo: (origen, destino): {"tiempo": minutos, "dist": km, "linea": "L1"}
+El grafo se asume bidireccional salvo que se especifique lo contrario.'''
+
 TRAMOS = {
     ("A", "C"): {"tiempo": 4, "dist": 1.0, "linea": "L1"},
     ("C", "B"): {"tiempo": 5, "dist": 1.5, "linea": "L1"},
@@ -56,9 +60,9 @@ def build_bidirectional(tramos):
 
 GRAFO = build_bidirectional(TRAMOS)
 
-# -----------------------
-# REGLAS / COSTE
-# -----------------------
+
+
+# REGLAS 
 TRANSFER_PENALTY = 3.0  # minutos extra por cada transferencia entre líneas
 
 def coste_tramo(attr: Dict[str, Any], linea_actual: Optional[str]) -> float:
@@ -72,9 +76,10 @@ def coste_tramo(attr: Dict[str, Any], linea_actual: Optional[str]) -> float:
         penalty += TRANSFER_PENALTY
     return tiempo + penalty
 
-# -----------------------
+
+
 # HEURÍSTICA (Euclidiana sobre coordenadas)
-# -----------------------
+
 def heuristica(u: str, v: str) -> float:
     if u in ESTACIONES_COORD and v in ESTACIONES_COORD:
         x1, y1 = ESTACIONES_COORD[u]
@@ -86,10 +91,11 @@ def heuristica(u: str, v: str) -> float:
     # si no hay coordenadas, heurística 0 (admisible)
     return 0.0
 
-# -----------------------
-# A* que considera 'linea' como parte del estado para contabilizar transfers
-# Estado en la cola: (f_score, g_score, nodo, linea_actual, camino_lista)
-# -----------------------
+
+
+'''A* que considera 'linea' como parte del estado para contabilizar transfers
+Estado en la cola: (f_score, g_score, nodo, linea_actual, camino_lista)'''
+
 def a_star_inicio_fin(start: str, goal: str):
     # heap: (f, g, nodo, linea_actual, camino)
     heap = []
@@ -126,9 +132,10 @@ def a_star_inicio_fin(start: str, goal: str):
             heapq.heappush(heap, (f2, g2, vec, nueva_linea, camino2))
     return None  # no hay ruta
 
-# -----------------------
-# UTILIDADES: pretty print y prueba
-# -----------------------
+
+
+# print y prueba
+
 def imprimir_resultado(res):
     if not res:
         print("No se encontró ruta.")
@@ -149,4 +156,3 @@ def ejemplo_prueba():
 if __name__ == "__main__":
     ejemplo_prueba()
 
-# Fin del script
